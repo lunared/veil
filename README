@@ -1,0 +1,12 @@
+# VEIL - Anonymous Chat Service
+
+VEIL performs location based matchmaking to create a session between two strangers to meet one another and chat freely.  Unmoderated and lacking persistence, it provides a discrete, fun, temporal way to find someone new to talk to without the social barriers.
+
+VEIL is and forever will be a text-based service, to provide an accessible an inherently judgement free social environment.
+
+# Starting VEIL 
+
+Two services are present for executing the VEIL server: the websocket communication app, and the matchmaking service.
+Both are python async applications and can be run simply with the python command.
+
+It is required that you have a redis and rabbitmq existing somewhere in order to communicate with.
