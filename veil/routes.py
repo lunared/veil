@@ -32,12 +32,12 @@ async def read_messages(queue, ws):
                 return
 
             msg = json.loads(message.body.decode())
-            if OP_CODES[msg['op']] == OP_CODES.CHAT:
+            if OP_CODES(msg['op']) == OP_CODES.CHAT:
                 await ws.send(json.dumps({
                     'op': OP_CODES.CHAT.value,
-                    'text': msg
+                    'text': msg['text']
                 }))
-            elif OP_CODES[msg['op']] == OP_CODES.LEAVE:
+            elif OP_CODES(msg['op']) == OP_CODES.LEAVE:
                 await ws.close()
                 return
 
@@ -47,15 +47,15 @@ async def send_messages(exchange, ws, sendto):
         await exchange.publish(
             aio_pika.Message(body=json.dumps({
                 'op': OP_CODES.CHAT.value,
-                'text': msg.encode()
-            }), 
+                'text': msg
+            }).encode()), 
             routing_key=sendto
         )
     else:
         await exchange.publish(
             aio_pika.Message(body=json.dumps({
                 'op': OP_CODES.LEAVE.value
-            })), 
+            }).encode()), 
             routing_key=sendto
         )
     
@@ -73,8 +73,8 @@ async def chat(request, ws):
         discover(app, guid),
         add_to_discovery(app, guid, latitude=geo_response.location.latitude, longitude=geo_response.location.longitude),
     )
-    sendto = data[0]
-    print("Found match " + sendto)
+    send_to = data[0]
+    print(f"Found match {guid} -> {send_to}")
     await ws.send(json.dumps({
         'op': OP_CODES.JOIN.value
     }))
@@ -91,5 +91,5 @@ async def chat(request, ws):
         
         await asyncio.gather(
             read_messages(queue, ws),
-            send_messages(exchange, ws, sendto)
+            send_messages(exchange, ws, send_to)
         )

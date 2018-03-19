@@ -33,7 +33,7 @@ export default {
     this.history = [];
     this.history.push({
       remote: false,
-      content: "Waiting for connection...",
+      content: "Establishing Uplink...",
       timestamp: Date.now(),
     });
     fetch('http://localhost:8000/auth', {
@@ -63,14 +63,14 @@ export default {
         let body = JSON.parse(ev.data);
         console.log(body);
         // connection found
-        if (body.op === 0) {
+        if (body.op == 0) {
           this.history.push({
             remote: false,
-            content: "Connection established",
+            content: "Begin Transmission",
             timestamp: Date.now(),
           });
         }
-        else if (body.op === 1){
+        else if (body.op == 1){
           this.history.push({
             remote: true,
             content: body.text,

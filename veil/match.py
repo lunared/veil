@@ -1,5 +1,18 @@
 import asyncio
 import aioredis
+from datetime import datetime
+
+def now():
+    return int(datetime.now().timestamp())
+
+def signature(guid):
+    return f"{guid}:{now()}"
+
+def extract(key):
+    data = key.split(":")
+    timestamp = int(data[1])
+    guid = data[0]
+    return guid, timestamp
 
 async def add_to_discovery(app, guid, latitude, longitude):
     """
@@ -7,8 +20,9 @@ async def add_to_discovery(app, guid, latitude, longitude):
     """
     connection = await aioredis.create_connection(app.config['REDIS_URL'], loop=app.loop)
     redis = aioredis.Redis(connection)
-    await redis.geoadd("match", latitude, longitude, guid)
-    await redis.publish("match", guid)
+    key = signature(guid)
+    await redis.geoadd("match", latitude, longitude, key)
+    await redis.publish("match", key)
     redis.close()
 
 async def discover(app, guid):
