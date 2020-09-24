@@ -1,7 +1,0 @@
-sanic
-websockets
-aioredis
-aio-pika
-geoip2
-itsdangerous
-sanic-cors
