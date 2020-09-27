@@ -1,88 +1,47 @@
 <template>
   <div id="app">
-    <h1>VEIL</h1>
-    <div v-if="state == 'entry'">
-      <figure>
-        <h3>Please verify your humanity</h3>
-        <Captcha @success="setToken" />
-      </figure>
-    </div>
-    <div v-else-if="state === 'profile'">
-      <figure>
-        <figcaption>Welcome</figcaption>
-        <!-- <label style="word-wrap: anywhere;">Your access token is {{token}}</label><br> -->
-        <fieldset>
-          <legend>Identify your model type</legend>
-          <label><input name="gender" type="radio" v-model="profileGender" value="m" checked>M</label>
-          <label><input name="gender" type="radio" v-model="profileGender" value="f">F</label>
-          <label><input name="gender" type="radio" v-model="profileGender" value="x">X</label>
-        </fieldset>
-        <br>
-        <fieldset>
-          <legend>Identify compatibility</legend>
-          <label><input type="checkbox" v-model="searchGender" value="m">M</label>
-          <label><input type="checkbox" v-model="searchGender" value="f" checked>F</label>
-          <label><input type="checkbox" v-model="searchGender" value="x">X</label>
-        </fieldset>
-        <button @click="proceed">Proceed</button>
-      </figure>
-    </div>
-    <ChatView v-else-if="state === 'chat'" :token="token" :profile="profile" :preferences="preferences" @back="toProfile" @reauth="toVerify" />
+    <h1 @click.prevent="toProfile">VEIL</h1>
+    <ChatView v-if="view === 'chat'" @back="toProfile" />
+    <ProfileForm v-else @proceed="toChat" />
   </div>
 </template>
 
 <script>
-import ChatView from './components/ChatView';
-import Captcha from './components/Verify';
+import ChatView from './components/chat/View';
+import ProfileForm from './components/home/Form';
 
 export default {
   name: 'App',
   components: {
     ChatView,
-    Captcha,
+    ProfileForm,
   },
   data() {
     return {
-      token: null,
-      state: 'entry',
-      profileGender: 'm',
-      searchGender: ['f'],
+      view: 'entry',
     };
   },
   created() {
-    this.setToken(localStorage.getItem('auth-token'));
+    this.$store.commit('auth/setToken', localStorage.getItem('auth-token'));
   },
   computed: {
-    profile() {
-      return [
-        `gender:${this.profileGender}`,
-      ];
+    token() {
+      return this.$store.state.auth.token;
     },
-    preferences() {
-      return [
-        ...this.searchGender.map(v => `gender:${v}`),
-      ];
-    }
   },
   methods: {
-    setToken(token) {
-      localStorage.setItem('auth-token', token);
-      this.token = token;
-      document.cookie = `X-Authorization=${token}; path=/`;
-      if (this.token) {
-        this.toProfile();
-      } else {
-        this.state = 'entry';
-      }
-    },
     toProfile() {
-      this.state = 'profile';
+      this.view = 'entry';
     },
-    toVerify() {
-      this.setToken(null);
-    },
-    proceed() {
-      this.state = 'chat';
+    toChat() {
+      this.view = 'chat';
+    }
+  },
+  watch: {
+    token(newToken) {
+      if (newToken === null) {
+        this.view = 'entry';
+      }
     }
   }
 };
@@ -107,5 +66,11 @@ html, body {
 body {
   margin: 0;
   padding: .5rem;
+}
+</style>
+
+<style scoped>
+h1:hover {
+  cursor: pointer;
 }
 </style>

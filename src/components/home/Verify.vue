@@ -17,8 +17,6 @@ export default {
     components: { VueRecaptcha },
     methods: {
         async exchange(data) {
-            console.log(data);
-
             // Do stuff with the received token.
             const { 
                 data: {
@@ -31,7 +29,7 @@ export default {
                 },
             );
 
-            this.$emit('success', token);
+            this.$store.commit('auth/setToken', token);
         }
     }
 }
