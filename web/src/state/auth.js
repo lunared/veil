@@ -10,9 +10,14 @@ export default {
     },
     mutations: {
         setToken(state, token) {
-            localStorage.setItem('auth-token', token);
+            if (token) {
+                localStorage.setItem('auth-token', token);
+                document.cookie = `X-Authorization=${token}; path=/`;
+            } else {
+                localStorage.removeItem('auth-token');
+                document.cookie = '';
+            }
             state.token = token;
-            document.cookie = `X-Authorization=${token}; path=/`;
         },
     }
 };

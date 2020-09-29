@@ -29,6 +29,7 @@ module.exports = (dependencies, express) => {
             const { user } = tokenProvider.verify(token);
             state.user = user;
         } catch (err) {
+            console.error(`invalid-token ${token}`);
             ws.send(JSON.stringify({
                 event_type: 'invalid-token',
                 data: {

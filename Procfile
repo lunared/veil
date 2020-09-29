@@ -1,2 +1,2 @@
-web: node web.js
-worker: node worker.js
+web: bin/start-nginx-debug yarn workspace server http
+worker: yarn workspace server worker

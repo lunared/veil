@@ -65,7 +65,7 @@ export default {
       }
 
       const host = location.origin.replace(/^http/, 'ws');
-      this.socket = new WebSocket(host);
+      this.socket = new WebSocket(`${host}/ws`);
       this.$store.commit('chat/begin');
       this.$store.commit('chat/push', {
         remote: false,

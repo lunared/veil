@@ -23,7 +23,7 @@ export default {
                     token,
                 } 
             } =  await axios.post(
-                '/auth/token',
+                '/api/auth/token',
                 {
                     'g-recaptcha-response': `${data}`,
                 },

@@ -1,0 +1,46 @@
+{
+  "name": "server",
+  "private": true,
+  "version": "1.0.0",
+  "description": "VEIL performs location based matchmaking to create a session between two strangers to meet one another and chat freely.  Unmoderated and lacking persistence, it provides a discrete, fun, temporal way to find someone new to talk to without the social barriers.",
+  "scripts": {
+    "http": "node web.js",
+    "worker": "node worker.js"
+  },
+  "dependencies": {
+    "axios": "^0.20.0",
+    "body-parser": "^1.19.0",
+    "bull": "^3.18.0",
+    "cookie-parser": "^1.4.5",
+    "core-js": "^3.6.5",
+    "express": "^4.17.1",
+    "express-promise-router": "^4.0.1",
+    "express-ws": "^4.0.0",
+    "http-status": "^1.4.2",
+    "ioredis": "^4.17.3",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
+    "throng": "^5.0.0",
+    "touch": "^3.1.0",
+    "uuid": "^8.3.0",
+    "ws": "^7.3.1"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.2",
+    "eslint-plugin-vue": "^6.2.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/essential",
+      "eslint:recommended"
+    ],
+    "parserOptions": {
+      "parser": "babel-eslint"
+    },
+    "rules": {}
+  }
+}

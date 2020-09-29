@@ -3,7 +3,7 @@ const throng = require('throng');
 let workers = process.env.WEB_CONCURRENCY || 2;
 
 function start() {
-    const { matchService, redis } = require('./server/dependencies')();
+    const { matchService, redis } = require('./dependencies')();
     const matchQueue = matchService.queue;
     matchQueue.process((job) => {
         const {
